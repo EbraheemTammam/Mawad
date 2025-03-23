@@ -61,17 +61,21 @@
 
 <!-- WorkDay Table -->
 <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-4 text-right">بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز</h2>
-    <!-- Export Excel Form -->
-    <form method="post" action="/export_excel" class="mb-4 flex justify-end gap-4">
-        <input type="hidden" name="start_date" value="{{ start_date or '' }}">
-        <input type="hidden" name="end_date" value="{{ end_date or '' }}">
-        <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
-        <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-            <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
-        </button>
-    </form>
+    <div class="flex items-center justify-between mb-4">
+        <!-- Heading -->
+        <h2 class="text-xl font-semibold text-right">بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز</h2>
+
+        <!-- Export Excel Form -->
+        <form method="post" action="/export_excel" class="flex justify-end gap-4">
+            <input type="hidden" name="start_date" value="{{ start_date or '' }}">
+            <input type="hidden" name="end_date" value="{{ end_date or '' }}">
+            <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
+            <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
+            </button>
+        </form>
+    </div>
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border">
             <thead class="bg-gray-200">
@@ -110,6 +114,10 @@
                     </td>
                 </tr>
                 {% endfor %}
+                <tr class="hover:bg-gray-100">
+                    <td colspan="5" class="py-2 px-4 border">مجموع الساعات</td>
+                    <td colspan="4" class="py-2 px-4 border">{{ sum_work_hours | round(2) }}</td>
+                </tr>
                 {% if not workdays %}
                 <tr>
                     <td colspan="9" class="py-2 px-4 text-center text-gray-500">لا توجد سجلات.</td>

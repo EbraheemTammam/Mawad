@@ -1,4 +1,5 @@
 from io import BytesIO
+from tokenize import Double
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -83,7 +84,8 @@ async def home(request: Request,
             "workdays": workdays,
             "start_date": start_date,
             "end_date": end_date,
-            "driver_name": driver_name
+            "driver_name": driver_name,
+            "sum_work_hours": sum([wd.work_hours.total_seconds() / 3600 for wd in workdays])
         }
     )
 
