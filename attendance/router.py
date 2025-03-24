@@ -341,6 +341,7 @@ async def export_pdf(
 
     # Table data
     headers = ["م", "التاريخ", "اليوم", "وقت البداية", "وقت النهاية", "ساعات الاستراحة", "ساعات العمل", "اسم السائق", "ملاحظات"]
+    headers = headers[::-1] # Reverse headers for RTL
     # Reshape headers
     reshaped_headers = [reshape_arabic(header) for header in headers]
     data = [reshaped_headers]
@@ -358,6 +359,7 @@ async def export_pdf(
             reshape_arabic(workday.driver_name),
             reshape_arabic(workday.notes or "")
         ]
+        row = row[::-1] # Reverse row for RTL
         data.append(row)
 
     # Create table
