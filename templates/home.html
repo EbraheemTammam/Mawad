@@ -172,29 +172,6 @@
 </div>
 
 <script>
-    // function showModal(id) {
-    //     const modal = document.getElementById('updateModal');
-    //     const form = document.getElementById('updateForm');
-    //     form.action = `/update/${id}`;
-
-    //     // Find the row by data-id attribute
-    //     const row = document.querySelector(`tr[data-id="${id}"]`);
-    //     if (!row) {
-    //         console.error(`Row with id ${id} not found`);
-    //         return;
-    //     }
-    //     const cells = row.getElementsByTagName('td');
-
-    //     // Populate form fields
-    //     form.elements['date'].value = cells[1].innerText;
-    //     form.elements['start_time'].value = cells[3].innerText.split(' ')[0].padStart(5, '0');
-    //     form.elements['end_time'].value = cells[4].innerText.split(' ')[0].padStart(5, '0');
-    //     form.elements['break_hours'].value = cells[5].innerText;
-    //     form.elements['driver_name'].value = cells[7].innerText;
-    //     form.elements['notes'].value = cells[8].innerText;
-
-    //     modal.classList.add('show');
-    // }
     function showModal(id) {
     const modal = document.getElementById('updateModal');
     const form = document.getElementById('updateForm');
