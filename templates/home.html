@@ -80,6 +80,7 @@
         <table class="min-w-full bg-white border">
             <thead class="bg-gray-200">
                 <tr>
+                    <th class="py-2 px-4 border">م</th>
                     <th class="py-2 px-4 border">التاريخ</th>
                     <th class="py-2 px-4 border">اليوم</th>
                     <th class="py-2 px-4 border">وقت البداية</th>
@@ -93,7 +94,8 @@
             </thead>
             <tbody>
                 {% for workday in workdays %}
-                <tr data-id="{{ workday.id }}" class="hover:bg-gray-100">
+                <tr data-id="{{ workday.id }}" class="hover:bg-gray-100 text-center align-middle">
+                    <td class="py-2 px-4 border">{{ workdays.index(workday) + 1 }}</td>
                     <td class="py-2 px-4 border">{{ workday.date.strftime('%Y-%m-%d') }}</td>
                     <td class="py-2 px-4 border">{{ workday.weekday }}</td>
                     <td class="py-2 px-4 border">{{ workday.start_time.strftime('%I:%M %p') }}</td>
@@ -103,7 +105,7 @@
                     <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
                     <td class="py-2 px-4 border">{{ workday.notes }}</td>
                     <td class="py-2 px-4 border">
-                        <button onclick="showModal('{{ workday.id }}')" class="text-yellow-500 hover:text-yellow-600 mr-2">
+                        <button onclick="showModal('{{ workday.id }}')" class="text-yellow-500 hover:text-yellow-600 ml-2">
                             <i class="fas fa-edit"></i>
                         </button>
                         <form method="post" action="/delete/{{ workday.id }}" class="inline">
@@ -115,7 +117,7 @@
                 </tr>
                 {% endfor %}
                 <tr class="hover:bg-gray-100">
-                    <td colspan="5" class="py-2 px-4 border">مجموع الساعات</td>
+                    <td colspan="6" class="py-2 px-4 border">مجموع الساعات</td>
                     <td colspan="4" class="py-2 px-4 border">{{ sum_work_hours | round(2) }}</td>
                 </tr>
                 {% if not workdays %}
