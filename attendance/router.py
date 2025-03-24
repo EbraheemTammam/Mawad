@@ -9,14 +9,14 @@ import openpyxl
 import pytz
 import urllib
 
-from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib import colors
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from arabic_reshaper import reshape
-from bidi.algorithm import get_display
-from reportlab.lib.styles import ParagraphStyle
+# from reportlab.lib.pagesizes import A4
+# from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+# from reportlab.lib import colors
+# from reportlab.pdfbase import pdfmetrics
+# from reportlab.pdfbase.ttfonts import TTFont
+# from arabic_reshaper import reshape
+# from bidi.algorithm import get_display
+# from reportlab.lib.styles import ParagraphStyle
 
 from database import Db
 from .schemas import WorkDay

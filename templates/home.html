@@ -25,56 +25,26 @@
     </form>
 </div>
 
-<!-- Create Form -->
-<div class="mb-6 bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-4 text-right">إضافة يوم عمل جديد</h2>
-    <form method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-            <label class="block text-gray-700 text-right">التاريخ</label>
-            <input type="date" name="date" required class="w-full p-2 border rounded-md text-right">
-        </div>
-        <div>
-            <label class="block text-gray-700 text-right">وقت البداية</label>
-            <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right">
-        </div>
-        <div>
-            <label class="block text-gray-700 text-right">وقت النهاية</label>
-            <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right">
-        </div>
-        <div>
-            <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
-            <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" placeholder="مثال: 1.5">
-        </div>
-        <div>
-            <label class="block text-gray-700 text-right">اسم السائق</label>
-            <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right">
-        </div>
-        <div>
-            <label class="block text-gray-700 text-right">ملاحظات</label>
-            <input type="text" name="notes" class="w-full p-2 border rounded-md text-right">
-        </div>
-        <div class="md:col-span-2">
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">إضافة يوم عمل</button>
-        </div>
-    </form>
-</div>
-
 <!-- WorkDay Table -->
 <div class="bg-white p-6 rounded-lg shadow-md">
     <div class="flex items-center justify-between mb-4">
         <!-- Heading -->
         <h2 class="text-xl font-semibold text-right">بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز</h2>
 
-        <!-- Export Excel Form -->
-        <form method="post" action="/export_excel" class="flex justify-end gap-4">
-            <input type="hidden" name="start_date" value="{{ start_date or '' }}">
-            <input type="hidden" name="end_date" value="{{ end_date or '' }}">
-            <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
-            <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
-            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-                <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
-            </button>
-        </form>
+        <div class="flex">
+            <button onclick="showCreateModal()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 ml-4">إضافة يوم عمل</button>
+
+            <!-- Export Excel Form -->
+            <form method="post" action="/export_excel" class="flex justify-end gap-4">
+                <input type="hidden" name="start_date" value="{{ start_date or '' }}">
+                <input type="hidden" name="end_date" value="{{ end_date or '' }}">
+                <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
+                <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
+                <button type="submit" class="bg-green-600 text-white px-4 rounded-md hover:bg-green-700">
+                    <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
+                </button>
+            </form>
+        </div>
     </div>
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border">
@@ -127,6 +97,43 @@
                 {% endif %}
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Create Modal -->
+<div id="createModal" class="modal">
+    <div class="modal-content">
+        <h2 class="text-xl font-semibold mb-4 text-right">إضافة يوم عمل جديد</h2>
+        <form id="createForm" method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 text-right">التاريخ</label>
+                <input type="date" name="date" required class="w-full p-2 border rounded-md text-right">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-right">وقت البداية</label>
+                <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-right">وقت النهاية</label>
+                <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
+                <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" placeholder="مثال: 1.5">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-right">اسم السائق</label>
+                <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-right">ملاحظات</label>
+                <input type="text" name="notes" class="w-full p-2 border rounded-md text-right">
+            </div>
+            <div class="md:col-span-2 flex justify-end gap-2">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">إضافة</button>
+                <button type="button" onclick="hideCreateModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">إلغاء</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -183,17 +190,27 @@
 
         // Populate form fields
         form.elements['date'].value = cells[1].innerText;
-        form.elements['start_time'].value = cells[2].innerText.split(' ')[0].padStart(5, '0');
-        form.elements['end_time'].value = cells[3].innerText.split(' ')[0].padStart(5, '0');
-        form.elements['break_hours'].value = cells[4].innerText;
-        form.elements['driver_name'].value = cells[6].innerText;
-        form.elements['notes'].value = cells[7].innerText;
+        form.elements['start_time'].value = cells[3].innerText.split(' ')[0].padStart(5, '0');
+        form.elements['end_time'].value = cells[4].innerText.split(' ')[0].padStart(5, '0');
+        form.elements['break_hours'].value = cells[5].innerText;
+        form.elements['driver_name'].value = cells[7].innerText;
+        form.elements['notes'].value = cells[8].innerText;
 
         modal.classList.add('show');
     }
 
     function hideModal() {
         document.getElementById('updateModal').classList.remove('show');
+    }
+
+    function showCreateModal() {
+        const modal = document.getElementById('createModal');
+        modal.classList.add('show');
+    }
+
+    function hideCreateModal() {
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('show');
     }
 </script>
 {% endblock %}

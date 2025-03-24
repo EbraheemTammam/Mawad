@@ -1,10 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime, time, timedelta
 from uuid import UUID
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+from settings import logger
 
 class WorkDay(BaseModel):
     id: UUID
