@@ -1,10 +1,13 @@
+import os
 import sqlite3
 from pathlib import Path
 from os.path import join
+import sys
 
 class Db:
 
     DB_URL = join(Path(__file__).resolve().parent, "db.sqlite3")
+    # DB_URL = os.path.join(os.path.dirname(sys.executable), "db.sqlite3")
 
     @staticmethod
     def init_db():
@@ -39,5 +42,5 @@ class Db:
         connection = sqlite3.connect(Db.DB_URL)
         cursor = connection.cursor()
         cursor.execute(query, params)
-        cursor.commit()
+        connection.commit()
         connection.close()
