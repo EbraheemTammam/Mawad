@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>{% block title %}تطبيق أيام العمل{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
-    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
-</head>
-<body class="font-sans">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="font-sans">
     <header class="p-4 text-right">
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl">متتبع أيام العمل</h1>
-            <button id="themeToggle" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500">
-                <i class="fas fa-moon"></i> <!-- Moon icon for light mode; switches to sun in dark -->
-            </button>
-        </div>
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl">متتبع أيام العمل</h1>
+        <button
+          id="themeToggle"
+          class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500"
+        >
+          <i class="fas fa-moon"></i>
+          <!-- Moon icon for light mode; switches to sun in dark -->
+        </button>
+      </div>
     </header>
     <main class="container mx-auto p-6">
-        {% block content %}
-        {% endblock %}
+      {% block content %} {% endblock %}
     </main>
     <footer class="text-center p-4">
-        <p>© 2025 تطبيق أيام العمل</p>
+      <p>© 2025 تطبيق أيام العمل</p>
     </footer>
 
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
 
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.add('dark');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      // Check for saved theme preference
+      if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark");
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      }
+
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        if (body.classList.contains("dark")) {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for dark mode
+          localStorage.setItem("theme", "dark");
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for light mode
+          localStorage.setItem("theme", "light");
         }
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for dark mode
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for light mode
-                localStorage.setItem('theme', 'light');
-            }
-        });
+      });
     </script>
-</body>
+  </body>
 </html>
