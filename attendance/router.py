@@ -8,18 +8,28 @@ from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 import openpyxl
 import pytz
 import urllib
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+import arabic_reshaper 
+from bidi.algorithm import get_display
 
-# from reportlab.lib.pagesizes import A4
 # from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 # from reportlab.lib import colors
 # from reportlab.pdfbase import pdfmetrics
 # from reportlab.pdfbase.ttfonts import TTFont
-# from arabic_reshaper import reshape
-# from bidi.algorithm import get_display
 # from reportlab.lib.styles import ParagraphStyle
 
 from database import Db
 from .schemas import WorkDay
+
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# Add this at the top of your file or in your app initialization
+
+pdfmetrics.registerFont(TTFont('AmiriRegular', 'static/fonts/Amiri-Regular.ttf'))
 
 attendance_router = APIRouter()
 from fastapi.templating import Jinja2Templates
@@ -270,5 +280,115 @@ async def export_excel(
     return StreamingResponse(
         excel_file,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  # Fixed 'routerlication' typo
+        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"}
+    )
+
+
+
+
+@attendance_router.post("/export_pdf", response_class=StreamingResponse)
+async def export_pdf(
+    request: Request,
+    title: str = Form(...),
+    start_date: Optional[str] = Form(None),
+    end_date: Optional[str] = Form(None),
+    driver_name: Optional[str] = Form(None)
+):
+    # Database query (same as your original)
+    query = "SELECT * FROM workdays WHERE 1=1"
+    params = []
+    if start_date:
+        query += " AND date >= ?"
+        params.append(start_date)
+    if end_date:
+        query += " AND date <= ?"
+        params.append(end_date)
+    if driver_name:
+        query += " AND driver_name LIKE ?"
+        params.append(f"%{driver_name}%")
+    query += " ORDER BY date"
+    rows = Db.execute_query(query, params)
+    workdays = [WorkDay.from_db_row(row) for row in rows]
+
+    # Create PDF buffer
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    
+    # Styles
+    styles = getSampleStyleSheet()
+    rtl_style = ParagraphStyle(
+        'rtl',
+        parent=styles['Normal'],
+        fontName='AmiriRegular',  # You'll need to register an Arabic-supporting font
+        fontSize=12,
+        alignment=2,  # 2 is right-aligned for RTL
+        leading=14
+    )
+
+    # Function to reshape Arabic text
+    def reshape_arabic(text):
+        if not text:
+            return text
+        reshaped_text = arabic_reshaper.reshape(str(text))
+        return get_display(reshaped_text)
+    
+    # Title
+    elements = []
+    doc_title = f"بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز "
+    reshaped_title = reshape_arabic(doc_title)
+    elements.append(Paragraph(reshaped_title, rtl_style))
+    elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing
+
+    # Table data
+    headers = ["م", "التاريخ", "اليوم", "وقت البداية", "وقت النهاية", "ساعات الاستراحة", "ساعات العمل", "اسم السائق", "ملاحظات"]
+    headers = headers[::-1] # Reverse headers for RTL
+    # Reshape headers
+    reshaped_headers = [reshape_arabic(header) for header in headers]
+    data = [reshaped_headers]
+    
+    # Add workday data
+    for i, workday in enumerate(workdays, 1):
+        row = [
+            str(i),
+            workday.date.strftime('%Y-%m-%d'),
+            reshape_arabic(workday.weekday),
+            reshape_arabic(format_time_arabic(workday.start_time)),
+            reshape_arabic(format_time_arabic(workday.end_time)),
+            str(round(workday.break_hours.total_seconds() / 3600, 2)),
+            str(round(workday.work_hours.total_seconds() / 3600, 2)),
+            reshape_arabic(workday.driver_name),
+            reshape_arabic(workday.notes or "")
+        ]
+        row = row[::-1] # Reverse row for RTL
+        data.append(row)
+
+    # Create table
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('FONT', (0, 0), (-1, -1), 'AmiriRegular'),  # Use Arabic-supporting font
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+    ]))
+    
+    elements.append(table)
+    
+    # Build PDF
+    doc.build(elements)
+    buffer.seek(0)
+
+    # Prepare filename
+    raw_filename = f"{doc_title}.pdf"
+    encoded_filename = urllib.parse.quote(raw_filename)
+    
+    # Return streaming response
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
         headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"}
     )
