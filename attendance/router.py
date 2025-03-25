@@ -4,18 +4,20 @@ from typing import Optional
 from uuid import UUID, uuid4
 from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
+from fastapi.templating import Jinja2Templates
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
-import openpyxl
-import pytz
-import urllib
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-import arabic_reshaper
 from bidi.algorithm import get_display
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+
+import openpyxl
+import pytz
+import urllib
+import arabic_reshaper
 
 from database import Db
 from .schemas import WorkDay
@@ -23,7 +25,6 @@ from .schemas import WorkDay
 pdfmetrics.registerFont(TTFont('AmiriRegular', 'static/fonts/Amiri-Regular.ttf'))
 
 attendance_router = APIRouter()
-from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="templates")
 def format_time_arabic(t: time) -> str:
     time_str = t.strftime('%I:%M %p').lstrip('0')
@@ -44,7 +45,9 @@ async def home(
         params.append(start_date)
     if end_date:
         query += " AND date <= ?"
-        params.append(end_date)
+        # Adjust end_date to include the full day by adding 1 day and using <
+        end_date_plus_one = (datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+        params.append(end_date_plus_one)
     if driver_name:
         query += " AND driver_name LIKE ?"
         params.append(f"%{driver_name}%")
