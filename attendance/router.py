@@ -4,18 +4,20 @@ from typing import Optional
 from uuid import UUID, uuid4
 from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
+from fastapi.templating import Jinja2Templates
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
-import openpyxl
-import pytz
-import urllib
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-import arabic_reshaper
 from bidi.algorithm import get_display
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+
+import openpyxl
+import pytz
+import urllib
+import arabic_reshaper
 
 from database import Db
 from .schemas import WorkDay
@@ -23,7 +25,6 @@ from .schemas import WorkDay
 pdfmetrics.registerFont(TTFont('AmiriRegular', 'static/fonts/Amiri-Regular.ttf'))
 
 attendance_router = APIRouter()
-from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="templates")
 def format_time_arabic(t: time) -> str:
     time_str = t.strftime('%I:%M %p').lstrip('0')
@@ -41,13 +42,15 @@ async def home(
     params = []
     if start_date:
         query += " AND date >= ?"
-        params.routerend(start_date)
+        params.append(start_date)
     if end_date:
         query += " AND date <= ?"
-        params.routerend(end_date)
+        # Adjust end_date to include the full day by adding 1 day and using <
+        end_date_plus_one = (datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+        params.append(end_date_plus_one)
     if driver_name:
         query += " AND driver_name LIKE ?"
-        params.routerend(f"%{driver_name}%")
+        params.append(f"%{driver_name}%")
     query += " ORDER BY date"
     rows = Db.execute_query(query, params)
     workdays = [WorkDay.from_db_row(row) for row in rows]
@@ -192,7 +195,7 @@ async def export_excel(
     # Create Excel workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز"
+    ws.title = "بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد"
 
     # Set RTL orientation
     ws.sheet_view.rightToLeft = True
@@ -234,8 +237,8 @@ async def export_excel(
             (3, workday.weekday),
             (4, format_time_arabic(workday.start_time)),
             (5, format_time_arabic(workday.end_time)),
-            (6, workday.break_hours.total_seconds() / 3600),
-            (7, workday.work_hours.total_seconds() / 3600),
+            (6, round(workday.break_hours.total_seconds() / 3600, 2)),
+            (7, round(workday.work_hours.total_seconds() / 3600, 2)),
             (8, workday.driver_name),
             (9, workday.notes)
         ]
@@ -266,7 +269,7 @@ async def export_excel(
     wb.save(excel_file)
     excel_file.seek(0)
 
-    raw_filename = f"{ws.title} {title}.xlsx"
+    raw_filename = f"{ws.title} - {title}.xlsx"
     encoded_filename = urllib.parse.quote(raw_filename)
     return StreamingResponse(
         excel_file,
@@ -283,7 +286,6 @@ async def export_pdf(
     end_date: Optional[str] = Form(None),
     driver_name: Optional[str] = Form(None)
 ):
-    # Database query (same as your original)
     query = "SELECT * FROM workdays WHERE 1=1"
     params = []
     if start_date:
@@ -314,6 +316,16 @@ async def export_pdf(
         leading=14
     )
 
+    title_style = ParagraphStyle(
+        'title',
+        parent=styles['Title'],
+        fontName='AmiriRegular',
+        fontSize=16,
+        fontWeight='Bold',
+        alignment=1,
+        leading=14,
+        spaceAfter=12
+    )
     # Function to reshape Arabic text
     def reshape_arabic(text):
         if not text:
@@ -323,9 +335,9 @@ async def export_pdf(
 
     # Title
     elements = []
-    doc_title = f"بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز "
+    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد - {title}"
     reshaped_title = reshape_arabic(doc_title)
-    elements.append(Paragraph(reshaped_title, rtl_style))
+    elements.append(Paragraph(reshaped_title, title_style))
     elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing
 
     # Table data
