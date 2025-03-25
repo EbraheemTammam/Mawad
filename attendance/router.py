@@ -12,22 +12,13 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-import arabic_reshaper 
+import arabic_reshaper
 from bidi.algorithm import get_display
-
-# from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-# from reportlab.lib import colors
-# from reportlab.pdfbase import pdfmetrics
-# from reportlab.pdfbase.ttfonts import TTFont
-# from reportlab.lib.styles import ParagraphStyle
-
-from database import Db
-from .schemas import WorkDay
-
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-# Add this at the top of your file or in your app initialization
+from database import Db
+from .schemas import WorkDay
 
 pdfmetrics.registerFont(TTFont('AmiriRegular', 'static/fonts/Amiri-Regular.ttf'))
 
@@ -256,7 +247,7 @@ async def export_excel(
         i = i + 1
 
     # Auto-adjust column widths, skipping merged cells
-    for col_num in range(1, len(headers) + 1):  # Columns A to H (8 columns)
+    for col_num in range(1, len(headers) + 1):  # Columns A to I (9 columns)
         max_length = 0
         column_letter = openpyxl.utils.get_column_letter(col_num)
         for row in range(3, ws.max_row + 1):  # Start from headers (row 3)
@@ -282,8 +273,6 @@ async def export_excel(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  # Fixed 'routerlication' typo
         headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"}
     )
-
-
 
 
 @attendance_router.post("/export_pdf", response_class=StreamingResponse)
@@ -313,7 +302,7 @@ async def export_pdf(
     # Create PDF buffer
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
-    
+
     # Styles
     styles = getSampleStyleSheet()
     rtl_style = ParagraphStyle(
@@ -331,7 +320,7 @@ async def export_pdf(
             return text
         reshaped_text = arabic_reshaper.reshape(str(text))
         return get_display(reshaped_text)
-    
+
     # Title
     elements = []
     doc_title = f"بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز "
@@ -345,7 +334,7 @@ async def export_pdf(
     # Reshape headers
     reshaped_headers = [reshape_arabic(header) for header in headers]
     data = [reshaped_headers]
-    
+
     # Add workday data
     for i, workday in enumerate(workdays, 1):
         row = [
@@ -375,9 +364,9 @@ async def export_pdf(
         ('LEFTPADDING', (0, 0), (-1, -1), 10),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
     ]))
-    
+
     elements.append(table)
-    
+
     # Build PDF
     doc.build(elements)
     buffer.seek(0)
@@ -385,7 +374,7 @@ async def export_pdf(
     # Prepare filename
     raw_filename = f"{doc_title}.pdf"
     encoded_filename = urllib.parse.quote(raw_filename)
-    
+
     # Return streaming response
     return StreamingResponse(
         buffer,
