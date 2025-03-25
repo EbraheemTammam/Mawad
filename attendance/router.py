@@ -266,7 +266,7 @@ async def export_excel(
     wb.save(excel_file)
     excel_file.seek(0)
 
-    raw_filename = f"{ws.title} {title}.xlsx"
+    raw_filename = f"{ws.title} - {title}.xlsx"
     encoded_filename = urllib.parse.quote(raw_filename)
     return StreamingResponse(
         excel_file,
@@ -283,7 +283,6 @@ async def export_pdf(
     end_date: Optional[str] = Form(None),
     driver_name: Optional[str] = Form(None)
 ):
-    # Database query (same as your original)
     query = "SELECT * FROM workdays WHERE 1=1"
     params = []
     if start_date:
@@ -333,7 +332,7 @@ async def export_pdf(
 
     # Title
     elements = []
-    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد- {title}"
+    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد - {title}"
     reshaped_title = reshape_arabic(doc_title)
     elements.append(Paragraph(reshaped_title, title_style))
     elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing

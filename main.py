@@ -18,11 +18,11 @@ async def startup_event():
 
 def start_fastapi():
     # Run FastAPI in a separate thread
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 
 def start_webview():
     # Create a webview window
-    window = webview.create_window("WorkDay Tracker", "http://127.0.0.1:8000", width=800, height=600)
+    window = webview.create_window("WorkDay Tracker", "http://127.0.0.1:8080", width=800, height=600)
     webview.start()
 
 if __name__ == "__main__":
