@@ -195,7 +195,7 @@ async def export_excel(
     # Create Excel workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد"
+    ws.title = "بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد لتدوير المخلفات"
 
     # Set RTL orientation
     ws.sheet_view.rightToLeft = True
@@ -335,7 +335,7 @@ async def export_pdf(
 
     # Title
     elements = []
-    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد - {title}"
+    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد لتدوير المخلفات - {title}"
     reshaped_title = reshape_arabic(doc_title)
     elements.append(Paragraph(reshaped_title, title_style))
     elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing
