@@ -5,7 +5,11 @@ block content %}
   <!-- Create Form -->
   <div class="bg-white p-6 rounded-lg shadow-md flex-1">
     <h2 class="text-xl font-semibold mb-4 text-right">تسجيل يوم عمل جديد</h2>
-    <form method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form
+      method="post"
+      action="/create"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
       <div>
         <label class="block text-gray-700 text-right">التاريخ</label>
         <input
@@ -126,75 +130,118 @@ block content %}
     <h2 class="text-xl font-semibold text-right">
       بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد لتدوير المخلفات
     </h2>
-        <form method="post" class="flex flex-row justify-end gap-4">
-            <input type="hidden" name="start_date" value="{{ start_date or '' }}">
-            <input type="hidden" name="end_date" value="{{ end_date or '' }}">
-            <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
-            <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
-            <button type="submit" formaction="/export_excel" class="bg-green-600 text-white px-4 rounded-md hover:bg-green-700">
-                <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
-            </button>
-            <button type="submit" formaction="/export_pdf" class="bg-red-600 text-white px-4 rounded-md hover:bg-green-700">
-                <i class="fas fa-file-pdf ml-2"></i>تصدير إلى Pdf
-            </button>
-        </form>
-    </div>
+    <form
+      method="post"
+      class="flex flex-col w-full justify-end gap-4 md:flex-row"
+    >
+      <input type="hidden" name="start_date" value="{{ start_date or '' }}" />
+      <input type="hidden" name="end_date" value="{{ end_date or '' }}" />
+      <input type="hidden" name="driver_name" value="{{ driver_name or '' }}" />
+      <input
+        type="text"
+        name="title"
+        placeholder="عنوان الملف"
+        required
+        class="p-2 border rounded-md text-right md:w-auto"
+      />
+      <button
+        type="submit"
+        formaction="/export_excel"
+        class="bg-green-600 text-white px-4 rounded-md hover:bg-green-700 p-4 md:p-0 md:px-4"
+      >
+        <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
+      </button>
+      <button
+        type="submit"
+        formaction="/export_pdf"
+        class="bg-red-600 text-white rounded-md hover:bg-green-700 p-4 md:p-0 md:px-4"
+      >
+        <i class="fas fa-file-pdf ml-2"></i>تصدير إلى Pdf
+      </button>
+    </form>
+  </div>
 
   <div class="overflow-x-auto">
     <table class="min-w-full border">
-        <thead class="bg-gray-200 dark:bg-gray-700">
-          <tr>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">م</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">التاريخ</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">اليوم</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">وقت البداية</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">وقت النهاية</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">ساعات الاستراحة</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">ساعات العمل</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">اسم السائق</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">ملاحظات</th>
-            <th class="py-2 px-4 border text-gray-800 dark:text-gray-200">الإجراءات</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-gray-800">
-          {% for workday in workdays %}
-          <tr data-id="{{ workday.id }}" class="{{ loop.cycle('bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300',
-                                                              'bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-300',
-                                                              'bg-yellow-50 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-300',
-                                                              'bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-300',
-                                                              'bg-pink-50 dark:bg-pink-950 text-pink-600 dark:text-pink-300') }} hover:bg-gray-100 dark:hover:bg-gray-600 text-center align-middle">
-            <td class="py-2 px-4 border">{{ loop.index }}</td>
-            <td class="py-2 px-4 border">{{ workday.date.strftime('%Y-%m-%d') }}</td>
-            <td class="py-2 px-4 border">{{ workday.weekday }}</td>
-            <td class="py-2 px-4 border">{{ workday.start_time.strftime('%I:%M %p') }}</td>
-            <td class="py-2 px-4 border">{{ workday.end_time.strftime('%I:%M %p') }}</td>
-            <td class="py-2 px-4 border">{{ (workday.break_hours / 3600) | float | round(2) }}</td>
-            <td class="py-2 px-4 border">{{ (workday.work_hours / 3600) | float | round(2) }}</td>
-            <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
-            <td class="py-2 px-4 border">{{ workday.notes }}</td>
-            <td class="py-2 px-4 border">
-              <button onclick="showModal('{{ workday.id }}')" class="text-yellow-500 hover:text-yellow-600 dark:text-yellow-400 dark:hover:text-yellow-500 ml-2">
-                <i class="fas fa-edit"></i>
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="py-2 px-4 border text-gray-700">م</th>
+          <th class="py-2 px-4 border text-gray-700">التاريخ</th>
+          <th class="py-2 px-4 border text-gray-700">اليوم</th>
+          <th class="py-2 px-4 border text-gray-700">وقت البداية</th>
+          <th class="py-2 px-4 border text-gray-700">وقت النهاية</th>
+          <th class="py-2 px-4 border text-gray-700">ساعات الاستراحة</th>
+          <th class="py-2 px-4 border text-gray-700">ساعات العمل</th>
+          <th class="py-2 px-4 border text-gray-700">اسم السائق</th>
+          <th class="py-2 px-4 border text-gray-700">ملاحظات</th>
+          <th class="py-2 px-4 border text-gray-700">الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        {% for workday in workdays %}
+        <tr
+          data-id="{{ workday.id }}"
+          class="{{ loop.cycle('bg-blue-50 text-blue-600',
+                                                              'bg-green-50  text-green-600',
+                                                              'bg-yellow-50  text-yellow-600 ',
+                                                              'bg-purple-50  text-purple-600 ',
+                                                              'bg-pink-50  text-pink-600 ') | safe }} hover:bg-gray-100  text-center align-middle"
+        >
+          <td class="py-2 px-4 border">{{ loop.index }}</td>
+          <td class="py-2 px-4 border">
+            {{ workday.date.strftime('%Y-%m-%d') }}
+          </td>
+          <td class="py-2 px-4 border">{{ workday.weekday }}</td>
+          <td class="py-2 px-4 border">
+            {{ workday.start_time.strftime('%I:%M %p') }}
+          </td>
+          <td class="py-2 px-4 border">
+            {{ workday.end_time.strftime('%I:%M %p') }}
+          </td>
+          <td class="py-2 px-4 border">
+            {{ (workday.break_hours / 3600) | float | round(2) }}
+          </td>
+          <td class="py-2 px-4 border">
+            {{ (workday.work_hours / 3600) | float | round(2) }}
+          </td>
+          <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
+          <td class="py-2 px-4 border">{{ workday.notes }}</td>
+          <td class="py-2 px-4 border">
+            <button
+              onclick="showModal('{{ workday.id }}')"
+              class="text-yellow-500 hover:text-yellow-600 ml-2"
+            >
+              <i class="fas fa-edit"></i>
+            </button>
+            <form
+              method="post"
+              action="/delete/{{ workday.id }}"
+              class="inline"
+            >
+              <button type="submit" class="text-red-500 hover:text-red-600">
+                <i class="fas fa-trash"></i>
               </button>
-              <form method="post" action="/delete/{{ workday.id }}" class="inline">
-                <button type="submit" class="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-          <tr class="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 font-bold">
-            <td colspan="6" class="py-2 px-4 border text-gray-800 dark:text-gray-200">مجموع الساعات</td>
-            <td colspan="4" class="py-2 px-4 border text-teal-700 dark:text-teal-300">{{ sum_work_hours | round(2) }}</td>
-          </tr>
-          {% if not workdays %}
-          <tr>
-            <td colspan="9" class="py-2 px-4 text-center text-gray-500 dark:text-gray-400">لا توجد سجلات.</td>
-          </tr>
-          {% endif %}
-        </tbody>
-      </table>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr class="bg-gradient-to-r from-gray-200 to-gray-300 font-bold">
+          <td colspan="6" class="py-2 px-4 border text-gray-800">
+            مجموع الساعات
+          </td>
+          <td colspan="4" class="py-2 px-4 border text-teal-700">
+            {{ sum_work_hours | round(2) }}
+          </td>
+        </tr>
+        {% if not workdays %}
+        <tr>
+          <td colspan="9" class="py-2 px-4 text-center text-gray-500">
+            لا توجد سجلات.
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
   </div>
 </div>
 
