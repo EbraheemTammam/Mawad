@@ -192,7 +192,7 @@ async def export_excel(
     # Create Excel workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز"
+    ws.title = "بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد"
 
     # Set RTL orientation
     ws.sheet_view.rightToLeft = True
@@ -234,8 +234,8 @@ async def export_excel(
             (3, workday.weekday),
             (4, format_time_arabic(workday.start_time)),
             (5, format_time_arabic(workday.end_time)),
-            (6, workday.break_hours.total_seconds() / 3600),
-            (7, workday.work_hours.total_seconds() / 3600),
+            (6, round(workday.break_hours.total_seconds() / 3600, 2)),
+            (7, round(workday.work_hours.total_seconds() / 3600, 2)),
             (8, workday.driver_name),
             (9, workday.notes)
         ]
@@ -314,6 +314,16 @@ async def export_pdf(
         leading=14
     )
 
+    title_style = ParagraphStyle(
+        'title',
+        parent=styles['Title'],
+        fontName='AmiriRegular',
+        fontSize=16,
+        fontWeight='Bold',
+        alignment=1,
+        leading=14,
+        spaceAfter=12
+    )
     # Function to reshape Arabic text
     def reshape_arabic(text):
         if not text:
@@ -323,9 +333,9 @@ async def export_pdf(
 
     # Title
     elements = []
-    doc_title = f"بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز "
+    doc_title = f"بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد- {title}"
     reshaped_title = reshape_arabic(doc_title)
-    elements.append(Paragraph(reshaped_title, rtl_style))
+    elements.append(Paragraph(reshaped_title, title_style))
     elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing
 
     # Table data
