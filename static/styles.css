@@ -75,6 +75,17 @@ label {
   display: block;
 }
 
+@media (max-width: 750px) {
+  .modal.show {
+    overflow: auto;
+  }
+}
+
+/*model*/
+body.dark .modal-content {
+  background: #374151; /* bg-gray-700 */
+  color: #d1d5db; /* text-gray-300 */
+}
 /*table*/
 body.dark table tbody tr:nth-child(odd) {
   background-color: #4b5eaa; /* bg-gray-700 */
