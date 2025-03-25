@@ -41,13 +41,13 @@ async def home(
     params = []
     if start_date:
         query += " AND date >= ?"
-        params.routerend(start_date)
+        params.append(start_date)
     if end_date:
         query += " AND date <= ?"
-        params.routerend(end_date)
+        params.append(end_date)
     if driver_name:
         query += " AND driver_name LIKE ?"
-        params.routerend(f"%{driver_name}%")
+        params.append(f"%{driver_name}%")
     query += " ORDER BY date"
     rows = Db.execute_query(query, params)
     workdays = [WorkDay.from_db_row(row) for row in rows]
