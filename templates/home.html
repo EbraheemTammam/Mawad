@@ -8,30 +8,66 @@ block content %}
     <form method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <label class="block text-gray-700 text-right">التاريخ</label>
-        <input type="date" name="date" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="date"
+          name="date"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">وقت البداية</label>
-        <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="time"
+          name="start_time"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">وقت النهاية</label>
-        <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="time"
+          name="end_time"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
-        <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" placeholder="مثال: 1.5" />
+        <input
+          type="number"
+          step="0.1"
+          name="break_hours"
+          required
+          class="w-full p-2 border rounded-md text-right"
+          placeholder="مثال: 1.5"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">اسم السائق</label>
-        <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="text"
+          name="driver_name"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">ملاحظات</label>
-        <input type="text" name="notes" class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="text"
+          name="notes"
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div class="md:col-span-2">
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 w-full" >إضافة</button>
+        <button
+          type="submit"
+          class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 w-full"
+        >
+          إضافة
+        </button>
       </div>
     </form>
   </div>
@@ -42,31 +78,55 @@ block content %}
     <form method="get" class="grid grid-cols-1 gap-4">
       <div>
         <label class="block text-gray-700 text-right">تاريخ البداية</label>
-        <input type="date" name="start_date" value="{{ start_date or '' }}" class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="date"
+          name="start_date"
+          value="{{ start_date or '' }}"
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">تاريخ النهاية</label>
-        <input type="date" name="end_date" value="{{ end_date or '' }}" class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="date"
+          name="end_date"
+          value="{{ end_date or '' }}"
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">اسم السائق</label>
-        <input type="text" name="driver_name" value="{{ driver_name or '' }}" class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="text"
+          name="driver_name"
+          value="{{ driver_name or '' }}"
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full" >تصفية</button>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+        >
+          تصفية
+        </button>
       </div>
     </form>
   </div>
 </div>
 
 <!-- WorkDay Table -->
-<div class="bg-white p-6 rounded-lg shadow-md">
-    <div class="flex items-center justify-between mb-4">
-        <!-- Heading -->
-        <h2 class="text-xl font-semibold text-right">بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد</h2>
-
-        <!-- Export Excel Form -->
-        <form method="post" class="flex justify-end gap-4">
+<div
+  class="bg-white overflow-scroll p-6 rounded-lg shadow-md md:overflow-hidden"
+>
+  <div
+    class="flex flex-col gap-4 md:flex-row md:gap-2 items-center justify-between mb-4"
+  >
+    <!-- Heading -->
+    <h2 class="text-xl font-semibold text-right">
+      بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد
+    </h2>
+        <form method="post" class="flex flex-row justify-end gap-4">
             <input type="hidden" name="start_date" value="{{ start_date or '' }}">
             <input type="hidden" name="end_date" value="{{ end_date or '' }}">
             <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
@@ -142,89 +202,134 @@ block content %}
 <div id="updateModal" class="modal">
   <div class="modal-content">
     <h2 class="text-xl font-semibold mb-4 text-right">تعديل يوم عمل</h2>
-    <form id="updateForm" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4" >
+    <form
+      id="updateForm"
+      method="post"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
       <div>
         <label class="block text-gray-700 text-right">التاريخ</label>
-        <input type="date" name="date" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="date"
+          name="date"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">وقت البداية</label>
-        <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="time"
+          name="start_time"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">وقت النهاية</label>
-        <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="time"
+          name="end_time"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
-        <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="number"
+          step="0.1"
+          name="break_hours"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">اسم السائق</label>
-        <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="text"
+          name="driver_name"
+          required
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div>
         <label class="block text-gray-700 text-right">ملاحظات</label>
-        <input type="text" name="notes" class="w-full p-2 border rounded-md text-right" />
+        <input
+          type="text"
+          name="notes"
+          class="w-full p-2 border rounded-md text-right"
+        />
       </div>
       <div class="md:col-span-2 flex justify-end gap-2">
-        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" >حفظ</button>
-        <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" >إلغاء</button>
+        <button
+          type="submit"
+          class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+        >
+          حفظ
+        </button>
+        <button
+          type="button"
+          onclick="hideModal()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+        >
+          إلغاء
+        </button>
       </div>
     </form>
   </div>
 </div>
 
 <script>
-    function showModal(id) {
-    const modal = document.getElementById('updateModal');
-    const form = document.getElementById('updateForm');
+  function showModal(id) {
+    const modal = document.getElementById("updateModal");
+    const form = document.getElementById("updateForm");
     form.action = `/update/${id}`;
 
     const row = document.querySelector(`tr[data-id="${id}"]`);
     if (!row) {
-        console.error(`Row with id ${id} not found`);
-        return;
-    }
-    const cells = row.getElementsByTagName('td');
-
-    // Helper function to convert to 24-hour format
-    function convertTo24Hour(timeStr) {
-        const [time, period] = timeStr.split(' ');
-        let [hours, minutes] = time.split(':');
-        hours = parseInt(hours, 10);
-        if (period === 'PM' && hours !== 12) {
-            hours += 12;
-        } else if (period === 'AM' && hours === 12) {
-            hours = 0;
-        }
-        return `${hours.toString().padStart(2, '0')}:${minutes}`;
-    }
-
-    form.elements['date'].value = cells[1].innerText;
-    form.elements['start_time'].value = convertTo24Hour(cells[3].innerText);
-    form.elements['end_time'].value = convertTo24Hour(cells[4].innerText);
-    form.elements['break_hours'].value = cells[5].innerText;
-    form.elements['driver_name'].value = cells[7].innerText;
-    form.elements['notes'].value = cells[8].innerText;
-
-    modal.classList.add('show');
+      console.error(`Row with id ${id} not found`);
+      return;
     }
     const cells = row.getElementsByTagName("td");
 
-    // Populate form fields
+    // Helper function to convert to 24-hour format
+    function convertTo24Hour(timeStr) {
+      const [time, period] = timeStr.split(" ");
+      let [hours, minutes] = time.split(":");
+      hours = parseInt(hours, 10);
+      if (period === "PM" && hours !== 12) {
+        hours += 12;
+      } else if (period === "AM" && hours === 12) {
+        hours = 0;
+      }
+      return `${hours.toString().padStart(2, "0")}:${minutes}`;
+    }
+
     form.elements["date"].value = cells[1].innerText;
-    form.elements["start_time"].value = cells[3].innerText
-      .split(" ")[0]
-      .padStart(5, "0");
-    form.elements["end_time"].value = cells[4].innerText
-      .split(" ")[0]
-      .padStart(5, "0");
+    form.elements["start_time"].value = convertTo24Hour(cells[3].innerText);
+    form.elements["end_time"].value = convertTo24Hour(cells[4].innerText);
     form.elements["break_hours"].value = cells[5].innerText;
     form.elements["driver_name"].value = cells[7].innerText;
     form.elements["notes"].value = cells[8].innerText;
 
     modal.classList.add("show");
+  }
+  const cells = row.getElementsByTagName("td");
+
+  // Populate form fields
+  form.elements["date"].value = cells[1].innerText;
+  form.elements["start_time"].value = cells[3].innerText
+    .split(" ")[0]
+    .padStart(5, "0");
+  form.elements["end_time"].value = cells[4].innerText
+    .split(" ")[0]
+    .padStart(5, "0");
+  form.elements["break_hours"].value = cells[5].innerText;
+  form.elements["driver_name"].value = cells[7].innerText;
+  form.elements["notes"].value = cells[8].innerText;
+
+  modal.classList.add("show");
 
   function hideModal() {
     document.getElementById("updateModal").classList.remove("show");
