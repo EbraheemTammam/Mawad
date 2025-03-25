@@ -66,21 +66,15 @@ block content %}
         <h2 class="text-xl font-semibold text-right">بيان عدد ساعات عمل لودر أحمد تمام بشركة مواد</h2>
 
         <!-- Export Excel Form -->
-        <form method="post" action="/export_excel" class="flex justify-end gap-4">
+        <form method="post" class="flex justify-end gap-4">
             <input type="hidden" name="start_date" value="{{ start_date or '' }}">
             <input type="hidden" name="end_date" value="{{ end_date or '' }}">
             <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
             <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
-            <button type="submit" class="bg-green-600 text-white px-4 rounded-md hover:bg-green-700">
+            <button type="submit" formaction="/export_excel" class="bg-green-600 text-white px-4 rounded-md hover:bg-green-700">
                 <i class="fas fa-file-excel ml-2"></i>تصدير إلى Excel
             </button>
-        </form>
-        <form method="post" action="/export_pdf" class="flex justify-end gap-4">
-            <input type="hidden" name="start_date" value="{{ start_date or '' }}">
-            <input type="hidden" name="end_date" value="{{ end_date or '' }}">
-            <input type="hidden" name="driver_name" value="{{ driver_name or '' }}">
-            <input type="text" name="title" placeholder="عنوان الملف" required class="p-2 border rounded-md text-right">
-            <button type="submit" class="bg-red-600 text-white px-4 rounded-md hover:bg-green-700">
+            <button type="submit" formaction="/export_pdf" class="bg-red-600 text-white px-4 rounded-md hover:bg-green-700">
                 <i class="fas fa-file-pdf ml-2"></i>تصدير إلى Pdf
             </button>
         </form>
@@ -110,8 +104,8 @@ block content %}
           <td class="py-2 px-4 border">{{ workday.weekday }}</td>
           <td class="py-2 px-4 border">{{ workday.start_time.strftime('%I:%M %p') }}</td>
           <td class="py-2 px-4 border">{{ workday.end_time.strftime('%I:%M %p') }}</td>
-          <td class="py-2 px-4 border">{{ workday.break_hours.total_seconds() / 3600 | round(2) }}</td>
-          <td class="py-2 px-4 border">{{ workday.work_hours.total_seconds() / 3600 | round(2) }}</td>
+          <td class="py-2 px-4 border">{{ (workday.break_hours.total_seconds() / 3600) | float | round(2) }}</td>
+          <td class="py-2 px-4 border">{{ (workday.work_hours.total_seconds() / 3600) | float | round(2) }}</td>
           <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
           <td class="py-2 px-4 border">{{ workday.notes }}</td>
           <td class="py-2 px-4 border">

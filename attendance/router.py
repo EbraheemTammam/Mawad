@@ -314,6 +314,16 @@ async def export_pdf(
         leading=14
     )
 
+    title_style = ParagraphStyle(
+        'title',
+        parent=styles['Title'],
+        fontName='AmiriRegular',
+        fontSize=16,
+        fontWeight='Bold',
+        alignment=1,
+        leading=14,
+        spaceAfter=12
+    )
     # Function to reshape Arabic text
     def reshape_arabic(text):
         if not text:
@@ -325,7 +335,7 @@ async def export_pdf(
     elements = []
     doc_title = f"بيان عدد ساعات العمل بشركة مواد لتدوير المخلفات بمصنع العز "
     reshaped_title = reshape_arabic(doc_title)
-    elements.append(Paragraph(reshaped_title, rtl_style))
+    elements.append(Paragraph(reshaped_title, title_style))
     elements.append(Paragraph("<br/><br/>", rtl_style))  # Add some spacing
 
     # Table data
