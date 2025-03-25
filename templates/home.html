@@ -1,65 +1,62 @@
-{% extends "base.html" %}
-
-{% block title %}أيام العمل - متتبع{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}أيام العمل - متتبع{% endblock %} {%
+block content %}
 <!-- Filter and Create Forms (Side by Side Above Table) -->
 <div class="flex flex-col md:flex-row gap-6 mb-6">
-    <!-- Create Form -->
-    <div class="bg-white p-6 rounded-lg shadow-md flex-1">
-        <h2 class="text-xl font-semibold mb-4 text-right">تسجيل يوم عمل جديد</h2>
-        <form method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-gray-700 text-right">التاريخ</label>
-                <input type="date" name="date" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">وقت البداية</label>
-                <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">وقت النهاية</label>
-                <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
-                <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" placeholder="مثال: 1.5">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">اسم السائق</label>
-                <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">ملاحظات</label>
-                <input type="text" name="notes" class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div class="md:col-span-2">
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 w-full">إضافة</button>
-            </div>
-        </form>
-    </div>
+  <!-- Create Form -->
+  <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+    <h2 class="text-xl font-semibold mb-4 text-right">إضافة يوم عمل جديد</h2>
+    <form method="post" action="/create" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-right">التاريخ</label>
+        <input type="date" name="date" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">وقت البداية</label>
+        <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">وقت النهاية</label>
+        <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
+        <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" placeholder="مثال: 1.5" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">اسم السائق</label>
+        <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">ملاحظات</label>
+        <input type="text" name="notes" class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div class="md:col-span-2">
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 w-full" >إضافة</button>
+      </div>
+    </form>
+  </div>
 
-    <!-- Filter Form -->
-    <div class="bg-white p-6 rounded-lg shadow-md flex-1">
-        <h2 class="text-xl font-semibold mb-4 text-right">تصفية أيام العمل</h2>
-        <form method="get" class="grid grid-cols-1 gap-4">
-            <div>
-                <label class="block text-gray-700 text-right">تاريخ البداية</label>
-                <input type="date" name="start_date" value="{{ start_date or '' }}" class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">تاريخ النهاية</label>
-                <input type="date" name="end_date" value="{{ end_date or '' }}" class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">اسم السائق</label>
-                <input type="text" name="driver_name" value="{{ driver_name or '' }}" class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">تصفية</button>
-            </div>
-        </form>
-    </div>
+  <!-- Filter Form -->
+  <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+    <h2 class="text-xl font-semibold mb-4 text-right">تصفية أيام العمل</h2>
+    <form method="get" class="grid grid-cols-1 gap-4">
+      <div>
+        <label class="block text-gray-700 text-right">تاريخ البداية</label>
+        <input type="date" name="start_date" value="{{ start_date or '' }}" class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">تاريخ النهاية</label>
+        <input type="date" name="end_date" value="{{ end_date or '' }}" class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">اسم السائق</label>
+        <input type="text" name="driver_name" value="{{ driver_name or '' }}" class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full" >تصفية</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- WorkDay Table -->
@@ -89,95 +86,95 @@
         </form>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="py-2 px-4 border">م</th>
-                    <th class="py-2 px-4 border">التاريخ</th>
-                    <th class="py-2 px-4 border">اليوم</th>
-                    <th class="py-2 px-4 border">وقت البداية</th>
-                    <th class="py-2 px-4 border">وقت النهاية</th>
-                    <th class="py-2 px-4 border">ساعات الاستراحة</th>
-                    <th class="py-2 px-4 border">ساعات العمل</th>
-                    <th class="py-2 px-4 border">اسم السائق</th>
-                    <th class="py-2 px-4 border">ملاحظات</th>
-                    <th class="py-2 px-4 border">الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for workday in workdays %}
-                <tr data-id="{{ workday.id }}" class="hover:bg-gray-100 text-center align-middle">
-                    <td class="py-2 px-4 border">{{ workdays.index(workday) + 1 }}</td>
-                    <td class="py-2 px-4 border">{{ workday.date.strftime('%Y-%m-%d') }}</td>
-                    <td class="py-2 px-4 border">{{ workday.weekday }}</td>
-                    <td class="py-2 px-4 border">{{ workday.start_time.strftime('%I:%M %p') }}</td>
-                    <td class="py-2 px-4 border">{{ workday.end_time.strftime('%I:%M %p') }}</td>
-                    <td class="py-2 px-4 border">{{ (workday.break_hours.total_seconds() / 3600) | float | round(2) }}</td>
-                    <td class="py-2 px-4 border">{{ (workday.work_hours.total_seconds() / 3600) | float | round(2) }}</td>
-                    <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
-                    <td class="py-2 px-4 border">{{ workday.notes }}</td>
-                    <td class="py-2 px-4 border">
-                        <button onclick="showModal('{{ workday.id }}')" class="text-yellow-500 hover:text-yellow-600 ml-2">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <form method="post" action="/delete/{{ workday.id }}" class="inline">
-                            <button type="submit" class="text-red-500 hover:text-red-600">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr class="hover:bg-gray-100">
-                    <td colspan="6" class="py-2 px-4 border">مجموع الساعات</td>
-                    <td colspan="4" class="py-2 px-4 border">{{ sum_work_hours | round(2) }}</td>
-                </tr>
-                {% if not workdays %}
-                <tr>
-                    <td colspan="9" class="py-2 px-4 text-center text-gray-500">لا توجد سجلات.</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="py-2 px-4 border">م</th>
+          <th class="py-2 px-4 border">التاريخ</th>
+          <th class="py-2 px-4 border">اليوم</th>
+          <th class="py-2 px-4 border">وقت البداية</th>
+          <th class="py-2 px-4 border">وقت النهاية</th>
+          <th class="py-2 px-4 border">ساعات الاستراحة</th>
+          <th class="py-2 px-4 border">ساعات العمل</th>
+          <th class="py-2 px-4 border">اسم السائق</th>
+          <th class="py-2 px-4 border">ملاحظات</th>
+          <th class="py-2 px-4 border">الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for workday in workdays %}
+        <tr data-id="{{ workday.id }}" class="hover:bg-gray-100 text-center align-middle" >
+          <td class="py-2 px-4 border">{{ workdays.index(workday) + 1 }}</td>
+          <td class="py-2 px-4 border">{{ workday.date.strftime('%Y-%m-%d') }}</td>
+          <td class="py-2 px-4 border">{{ workday.weekday }}</td>
+          <td class="py-2 px-4 border">{{ workday.start_time.strftime('%I:%M %p') }}</td>
+          <td class="py-2 px-4 border">{{ workday.end_time.strftime('%I:%M %p') }}</td>
+          <td class="py-2 px-4 border">{{ workday.break_hours.total_seconds() / 3600 | round(2) }}</td>
+          <td class="py-2 px-4 border">{{ workday.work_hours.total_seconds() / 3600 | round(2) }}</td>
+          <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
+          <td class="py-2 px-4 border">{{ workday.notes }}</td>
+          <td class="py-2 px-4 border">
+            <button onclick="showModal('{{ workday.id }}')" class="text-yellow-500 hover:text-yellow-600 ml-2" >
+              <i class="fas fa-edit"></i>
+            </button>
+            <form method="post" action="/delete/{{ workday.id }}" class="inline" >
+              <button type="submit" class="text-red-500 hover:text-red-600">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr class="hover:bg-gray-100">
+          <td colspan="6" class="py-2 px-4 border">مجموع الساعات</td>
+          <td colspan="4" class="py-2 px-4 border">{{ sum_work_hours | round(2) }}</td>
+        </tr>
+        {% if not workdays %}
+        <tr>
+          <td colspan="9" class="py-2 px-4 text-center text-gray-500">لا توجد سجلات.</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- Update Modal -->
 <div id="updateModal" class="modal">
-    <div class="modal-content">
-        <h2 class="text-xl font-semibold mb-4 text-right">تعديل يوم عمل</h2>
-        <form id="updateForm" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-gray-700 text-right">التاريخ</label>
-                <input type="date" name="date" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">وقت البداية</label>
-                <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">وقت النهاية</label>
-                <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
-                <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">اسم السائق</label>
-                <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-right">ملاحظات</label>
-                <input type="text" name="notes" class="w-full p-2 border rounded-md text-right">
-            </div>
-            <div class="md:col-span-2 flex justify-end gap-2">
-                <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">حفظ</button>
-                <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">إلغاء</button>
-            </div>
-        </form>
-    </div>
+  <div class="modal-content">
+    <h2 class="text-xl font-semibold mb-4 text-right">تعديل يوم عمل</h2>
+    <form id="updateForm" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4" >
+      <div>
+        <label class="block text-gray-700 text-right">التاريخ</label>
+        <input type="date" name="date" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">وقت البداية</label>
+        <input type="time" name="start_time" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">وقت النهاية</label>
+        <input type="time" name="end_time" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">ساعات الاستراحة</label>
+        <input type="number" step="0.1" name="break_hours" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">اسم السائق</label>
+        <input type="text" name="driver_name" required class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-right">ملاحظات</label>
+        <input type="text" name="notes" class="w-full p-2 border rounded-md text-right" />
+      </div>
+      <div class="md:col-span-2 flex justify-end gap-2">
+        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" >حفظ</button>
+        <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" >إلغاء</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
@@ -215,9 +212,24 @@
 
     modal.classList.add('show');
     }
+    const cells = row.getElementsByTagName("td");
 
-    function hideModal() {
-        document.getElementById('updateModal').classList.remove('show');
-    }
+    // Populate form fields
+    form.elements["date"].value = cells[1].innerText;
+    form.elements["start_time"].value = cells[3].innerText
+      .split(" ")[0]
+      .padStart(5, "0");
+    form.elements["end_time"].value = cells[4].innerText
+      .split(" ")[0]
+      .padStart(5, "0");
+    form.elements["break_hours"].value = cells[5].innerText;
+    form.elements["driver_name"].value = cells[7].innerText;
+    form.elements["notes"].value = cells[8].innerText;
+
+    modal.classList.add("show");
+
+  function hideModal() {
+    document.getElementById("updateModal").classList.remove("show");
+  }
 </script>
 {% endblock %}
