@@ -199,10 +199,10 @@ block content %}
             {{ workday.end_time.strftime('%I:%M %p') }}
           </td>
           <td class="py-2 px-4 border">
-            {{ (workday.break_hours / 3600) | float | round(2) }}
+            {{ (workday.break_hours.total_seconds() / 3600) | float | round(2) }}
           </td>
           <td class="py-2 px-4 border">
-            {{ (workday.work_hours / 3600) | float | round(2) }}
+            {{ (workday.work_hours.total_seconds() / 3600) | float | round(2) }}
           </td>
           <td class="py-2 px-4 border">{{ workday.driver_name }}</td>
           <td class="py-2 px-4 border">{{ workday.notes }}</td>
